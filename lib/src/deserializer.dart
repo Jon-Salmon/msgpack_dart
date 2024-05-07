@@ -172,7 +172,13 @@ class Deserializer {
   }
 
   String _readString(int length) {
-    final list = _readBuffer(length);
+    if (length == 0) {
+      return "";
+    }
+
+    final list = Uint8List.view(_list.buffer, _list.offsetInBytes + _offset, length);
+    _offset += length;
+
     final len = list.length;
     for (int i = 0; i < len; ++i) {
       if (list[i] > 127) {
